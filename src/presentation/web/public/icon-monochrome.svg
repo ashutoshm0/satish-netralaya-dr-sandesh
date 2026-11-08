@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Satish Netralaya Dr Sandesh Monochrome Mark</title>
+  <rect x="6" y="6" width="52" height="52" rx="15" fill="#0F172A"/>
+  <rect x="14" y="14" width="36" height="36" rx="11" fill="#FFFFFF" />
+  <path d="M24 23v18m0-11h14" stroke="#0F172A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24" cy="23" r="2.8" fill="#0F172A"/>
+  <circle cx="24" cy="41" r="2.8" fill="#0F172A"/>
+  <circle cx="38" cy="30" r="2.8" fill="#0F172A"/>
+  <circle cx="45.5" cy="45.5" r="7.2" fill="#0F172A" />
+  <path d="m42.2 45.5 2.1 2.2 4-4.4" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

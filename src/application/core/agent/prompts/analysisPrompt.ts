@@ -1,0 +1,163 @@
+/**
+ * Analysis Prompt Builder
+ * Single Responsibility: Build the user prompt for analysis requests
+ */
+
+// ════════════════════════════════════════════════════════════════════════════
+// TYPES
+// ════════════════════════════════════════════════════════════════════════════
+
+export interface AnalysisPromptOptions {
+  repoUrl: string;
+  deep?: boolean;
+  skillsEnabled?: boolean;
+  skillsMax?: number;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// PROMPT BUILDER
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Build the analysis prompt for a repository
+ */
+export function buildAnalysisPrompt(options: AnalysisPromptOptions): string {
+  const { repoUrl, deep = false, skillsEnabled = true, skillsMax = 2 } = options;
+
+  const deepInstructions = deep
+    ? `
+
+**PHASE 6 — DEEP ANALYSIS (ENABLED)**
+Output: "**PHASE 6 — DEEP ANALYSIS**" then:
+
+8. Call \`pack_repository\` with mode="deep" to get consolidated source code
+
+9. Analyze the source code comprehensively for:
+
+   **Architecture & Design:**
+   - Project structure and organization (is it modular? separation of concerns?)
+   - Design patterns used (or missing)
+   - Component coupling and cohesion
+   - Dependency injection patterns
+   - State management approach
+   
+   **Code Quality:**
+   - Code duplication / DRY violations
+   - Function/method complexity (long functions, deep nesting)
+   - Naming conventions and consistency
+   - Magic numbers/strings that should be constants
+   - Dead code or unused exports
+   - TODO/FIXME/HACK comments indicating technical debt
+   
+   **Error Handling:**
+   - Exception handling patterns (try/catch coverage)
+   - Error propagation strategy
+   - User-facing error messages quality
+   - Null/undefined safety
+   
+   **Security Concerns:**
+   - Input validation gaps
+   - Potential injection vulnerabilities
+   - Hardcoded secrets or credentials
+   - Insecure API usage patterns
+   
+   **Performance:**
+   - Potential memory leaks (unclosed resources)
+   - N+1 query patterns
+   - Unnecessary re-renders (React) or recomputation
+   - Large bundle/import concerns
+   
+   **Testability:**
+   - Code structure that hinders testing
+   - Missing abstraction layers
+   - Global state that complicates mocking
+   
+   **Best Practices per Stack:**
+   - For TypeScript: proper typing, no \`any\` abuse, strict null checks
+   - For React: proper hooks usage, component organization
+   - For Node.js: async patterns, stream handling
+   - For Python: type hints, docstrings, PEP8 compliance
+   - For Go: error handling, goroutine leaks
+   - For Rust: ownership patterns, unsafe usage
+
+10. Generate detailed findings in the "🔬 Deep Analysis" section with:
+    - **Code Architecture Review** - Strengths and areas for improvement
+    - **Potential Issues** - With code snippets and line references
+    - **Refactoring Suggestions** - Specific, actionable improvements
+    - **Code Quality Summary** table
+
+**IMPORTANT for Deep Analysis:**
+- Be SPECIFIC: quote actual code patterns you found
+- Provide code examples showing the issue AND the fix
+- Prioritize actionable insights over exhaustive listing
+- Connect findings to real impact (maintainability, bugs, performance)`
+    : "";
+
+  return `Analyze the GitHub repository: ${repoUrl}
+
+## CRITICAL OUTPUT REQUIREMENT
+Before executing EACH phase, you MUST output the phase header. This is mandatory for proper report capture.
+
+## REPOSITORY IDENTITY LOCK (MANDATORY)
+- Analyze ONLY this repository: ${repoUrl}
+- Never reuse repository names, evidence, or findings from previous analyses
+- In the final report, **Repository** must match the repository from \`get_repo_meta\`
+- If any repository name mismatch appears, correct it before finishing
+
+## OUTPUT HYGIENE (MANDATORY)
+- Output ONLY the report content sections (phase headers + markdown report)
+- Do NOT include meta narration such as: "Let me...", "Now I have enough context...", "Based on my analysis..."
+- Ensure the final markdown has no conversational text outside the report structure
+- Ensure score tables and issue counts are internally consistent with the findings listed
+
+Execute the analysis following the phased approach:
+
+**PHASE 1 — RECONNAISSANCE**
+First, output: "**PHASE 1 — RECONNAISSANCE**" then:
+1. Call \`get_repo_meta\` to collect repository metadata and detect primary language
+2. Call \`list_repo_files\` to index the file tree and detect repository type
+
+**PHASE 2 — STACK DETECTION**
+Output: "**PHASE 2 — STACK DETECTION**" then:
+3. From metadata.languages and file tree, identify:
+   - Primary technology stack (Node, Python, Go, Rust, Java, etc.)
+   - Repository type (monorepo, single-package, library, application)
+   - Complexity level (trivial <10 files, standard, large >500 files)
+4. ${skillsEnabled
+    ? `Call \`list_analysis_skills\` with:
+   - \`mode\`: "${deep ? "deep" : "quick"}"
+   - \`detectedStacks\`: normalized stack names you identified
+   Select up to ${skillsMax} relevant skills for this repository.`
+    : "Skills mode is disabled for this run. Skip skill-related tools."}
+
+**PHASE 3 — STRATEGIC FILE READING**
+Output: "**PHASE 3 — STRATEGIC FILE READING**" then:
+5. ${skillsEnabled
+    ? "For each selected skill, call `read_analysis_skill` and extract:\n   - stack-specific checks\n   - evidence expectations\n   - scoring hints"
+    : "Continue directly with file reading priorities."}
+
+6. Read files in priority order (max 20 reads):
+   - Priority 1: README.md, LICENSE, CONTRIBUTING.md, SECURITY.md
+   - Priority 2: .github/workflows/*.yml (up to 3), dependabot.yml
+   - Priority 3: Stack manifest (package.json, pyproject.toml, go.mod, Cargo.toml, etc.)
+   - Priority 4: Quality configs (linter, formatter, test config) — only if detected
+   
+7. For each 404 response, record as evidence of missing file
+
+**PHASE 4 — ANALYSIS**
+Output: "**PHASE 4 — ANALYSIS**" then:
+8. Apply P0/P1/P2 criteria strictly based on:
+   - Repository type and complexity
+   - Detected stack requirements
+   - Evidence collected
+   - Applicable loaded skills (if any)
+
+**PHASE 5 — REPORT**
+Output: "**PHASE 5 — REPORT**" then:
+9. Generate the structured health report with:
+   - Overall score and category breakdown
+   - Findings grouped by priority with evidence
+   - Actionable next steps${deepInstructions}
+
+Begin the analysis now by outputting "**PHASE 1 — RECONNAISSANCE**" and then calling the tools.`;
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-labelledby="title">
+  <title id="title">Satish Netralaya Dr Sandesh Apple Touch Icon</title>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="18" x2="162" y2="162" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B5FFF"/>
+      <stop offset="1" stop-color="#115E59"/>
+    </linearGradient>
+    <linearGradient id="card" x1="42" y1="40" x2="138" y2="138" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E9F1FF"/>
+    </linearGradient>
+    <linearGradient id="badge" x1="105" y1="105" x2="151" y2="151" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F97316"/>
+      <stop offset="1" stop-color="#C2410C"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="160" height="160" rx="42" fill="url(#bg)"/>
+  <rect x="39" y="39" width="102" height="102" rx="30" fill="url(#card)" />
+  <path d="M68 65v50m0-30h38" stroke="#0B5FFF" stroke-width="6.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="68" cy="65" r="7.2" fill="#0B5FFF"/>
+  <circle cx="68" cy="115" r="7.2" fill="#0B5FFF"/>
+  <circle cx="106" cy="85" r="7.2" fill="#0B5FFF"/>
+  <path d="M56 53h64" stroke="#FFFFFF" stroke-opacity="0.34" stroke-width="4.4" stroke-linecap="round"/>
+  <circle cx="129" cy="129" r="21" fill="url(#badge)" />
+  <path d="m119.6 128.5 6.4 6.6 12.2-13.2" fill="none" stroke="#fff" stroke-width="6.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
